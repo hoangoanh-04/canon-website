@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canon Store - Giao Diện Đen Xanh Vàng</title>
+    <!-- Nhúng Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #1f2937; /* Xám than nhẹ */
+        }
+        .icon-logo {
+            filter: brightness(0) saturate(100%) invert(74%) sepia(71%) saturate(862%) hue-rotate(11deg) brightness(104%) contrast(101%);
+        }
+        /* Style cho mỗi section chiếm toàn màn hình */
+        .banner img {
+             width: 100%;
+             height: auto;
+             display: block;
+            }
+        .full-page-section {
+            min-height: 100vh;
+            padding-top: 8rem; /* Đảm bảo nội dung không bị header cố định che */
+            padding-bottom: 4rem;
+        }
+        .section-heading {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fcd34d; /* Màu Vàng */
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+        /* Custom style cho form field (mô phỏng form bootstrap) */
+        .custom-form-control {
+            border: 1px solid #4b5563; /* Xám đậm */
+            background-color: #1f2937; /* Xám than */
+            color: #f2f6fc;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .custom-form-control:focus {
+            outline: none;
+            border-color: #fcd34d; /* Màu Vàng */
+            box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.4);
+        }
+        .card {
+            height: 100%;                     /* Card cao bằng nhau */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;   /* Đẩy nút xuống cuối */
+        }
+
+        .card-body {
+           flex: 1;                          /* Giúp phần nội dung giãn đều */
+           display: flex;
+           flex-direction: column;
+        } 
+
+        .card-body .btn {
+           margin-top: auto;                 /* Nút luôn nằm sát đáy */
+        }
+
+        /* Responsive Grid cho ảnh: 3 sản phẩm 1 hàng trên desktop, 2 sản phẩm 1 hàng trên mobile */
+        .product-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr)); /* Mặc định 3 cột */
+        }
+        @media (max-width: 1024px) {
+            /* Trên Tablet và Mobile, chuyển về 2 cột hoặc 1 cột */
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)); 
+            }
+        }
+        @media (max-width: 640px) {
+            /* Trên Mobile nhỏ, chuyển về 1 cột */
+            .product-grid {
+                grid-template-columns: repeat(1, minmax(0, 1fr)); 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER (Thanh Công cụ Cố định) -->
+    <header class="fixed top-0 left-0 w-full bg-gray-900 shadow-xl z-50 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center"> 
+            <img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" 
+     alt="Logo" 
+     class="icon-logo"
+     style="height:40px; width:auto; margin-right:10px;">
+            <div class="text-3xl font-extrabold text-yellow-400 tracking-wider">CANON STORE</div>
+            <!-- Menu Điều Hướng -->
+            <nav class="hidden md:flex space-x-6">
+                <a href="#trang-chu" class="text-gray-300 hover:text-yellow-400 transition duration-300 font-semibold">Trang Chủ</a>
+                <a href="#san-pham" class="text-gray-300 hover:text-yellow-400 transition duration-300 font-semibold">Sản Phẩm</a>
+                <a href="#gioi-thieu" class="text-gray-300 hover:text-yellow-400 transition duration-300 font-semibold">Giới Thiệu</a>
+                <a href="#tin-tuc" class="text-gray-300 hover:text-yellow-400 transition duration-300 font-semibold">Tin Tức</a>
+                <a href="#lien-he" class="text-gray-300 hover:text-yellow-400 transition duration-300 font-semibold">Liên Hệ</a>
+            </nav>
+            
+         <!-- Khung Tìm Kiếm và Nút Tìm Kiếm/Giỏ hàng -->
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden sm:block">
+                    <input type="search" placeholder="Tìm kiếm máy ảnh..." 
+                           class="py-2 pl-4 pr-10 text-sm border border-gray-300 rounded-full focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-300 w-40 lg:w-56">
+                    <button class="absolute right-0 top-0 mt-2 mr-3 text-gray-500 hover:text-red-700 transition duration-300" aria-label="Tìm kiếm">
+                        <!-- SVG Icon Kính Lúp -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+
+                <button class="text-gray-700 hover:text-red-700" aria-label="Giỏ hàng">
+                    <!-- SVG Icon Giỏ Hàng -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </button>
+                <!-- Nút Mobile Menu -->
+                <button class="text-gray-700 hover:text-red-700 lg:hidden" aria-label="Menu">
+                    <!-- SVG Icon Menu (Hamburger) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Search Bar (Hiện trên màn hình nhỏ) -->
+        <div class="block sm:hidden px-4 pb-3 border-t border-gray-100">
+            <div class="relative">
+                <input type="search" placeholder="Tìm kiếm máy ảnh..." 
+                       class="py-2 pl-4 pr-10 text-sm border border-gray-300 rounded-full focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-300 w-full">
+                <button class="absolute right-0 top-0 mt-2 mr-3 text-gray-500 hover:text-red-700 transition duration-300" aria-label="Tìm kiếm">
+                    <!-- SVG Icon Kính Lúp -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+        
+        <!-- BANNER QUẢNG CÁO  -->
+        <div class="w-full bg-red-700 py-2.5 text-yellow-400 text-center text-base font-medium animate-pulse">
+            ⚡ ƯU ĐÃI ĐẶC BIỆT: Giảm 20% cho dòng Canon EOS R. Miễn phí vận chuyển toàn quốc! 🎁
+        </div>
+    </header>
+
+    <!-- 1. TRANG CHỦ (Section 1) -->
+    <section id="trang-chu" class="full-page-section bg-gray-900 flex items-center justify-center border-b border-gray-800">
+        <div class="max-w-5xl text-center p-6">
+            <header class="banner">
+           <img src="ảnh baner.jpg" alt="">
+</header>
+            <h2 class="text-4xl font-extrabold text-gray-100 mb-6 leading-tight">
+                Ghi Lại Mọi Khoảnh Khắc-Sống Trọn <span class="text-yellow-400">Đam Mê</span>.
+            </h2>
+            <p class="text-2xl text-gray-400 mb-10">
+                Khám phá công nghệ hình ảnh tiên tiến nhất từ Canon - Sáng tạo là vô tận.
+            </p>
+            <a href="#san-pham" class="inline-block bg-yellow-500 text-gray-900 px-10 py-4 rounded-full text-xl font-bold hover:bg-yellow-400 transition duration-300 shadow-2xl transform hover:scale-105">
+                Xem Ngay Các Sản Phẩm Nổi Bật
+            </a>
+        </div>
+    </section>
+
+    <!-- 2. SẢN PHẨM (Section 2 - Lưới 3x2) -->
+    <section id="san-pham" class="full-page-section bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-heading">Sản Phẩm Nổi Bật </h2>
+            
+           <div class="product-grid">
+    
+    <!-- HÀNG 1 -->
+    <!-- Sản Phẩm 1: EOS R5 -->
+    <div class="bg-gray-900 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(252,211,77,0.5)] transition duration-300 overflow-hidden border border-gray-700 p-4 flex flex-col h-full">
+        <img src="r5.jpg" alt="Canon EOS R5" class="w-full h-55 object-cover rounded-lg mb-3 border border-gray-700">
+        <h3 class="text-xl font-bold text-gray-100">Canon EOS R5</h3>
+        <p class="text-yellow-400 font-extrabold my-1">119.900.000 VNĐ</p>
+        <p class="text-sm text-gray-400 line-clamp-2 mb-3">
+            45MP Full-frame, Quay 8K, Ổn định hình ảnh 5 trục. (Flagship)
+        </p>
+        <button class="mt-auto w-full bg-blue-900 text-yellow-400 py-2 rounded-lg text-sm font-semibold hover:bg-blue-800 transition">
+            Thêm vào giỏ
+        </button>
+    </div>
+
+    <!-- Sản Phẩm 2: EOS R6 Mark II -->
+    <div class="bg-gray-900 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(252,211,77,0.5)] transition duration-300 overflow-hidden border border-gray-700 p-4 flex flex-col h-full">
+        <img src="r6.jpg" alt="Canon EOS R6 Mark II" class="w-full h-55 object-cover rounded-lg mb-3 border border-gray-700">
+        <h3 class="text-xl font-bold text-gray-100">Canon R6 Mark II</h3>
+        <p class="text-yellow-400 font-extrabold my-1">69.500.000 VNĐ</p>
+        <p class="text-sm text-gray-400 line-clamp-2 mb-3">
+            24.2MP, Tốc độ 40fps, Chuyên nghiệp đa dụng.
+        </p>
+        <button class="mt-auto w-full bg-blue-900 text-yellow-400 py-2 rounded-lg text-sm font-semibold hover:bg-blue-800 transition">
+            Thêm vào giỏ
+        </button>
+    </div>
+
+    <!-- Sản Phẩm 3: EOS R7 -->
+    <div class="bg-gray-900 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(252,211,77,0.5)] transition duration-300 overflow-hidden border border-gray-700 p-4 flex flex-col h-full">
+        <img src="r7.jpg" alt="Canon EOS R7" class="w-full h-55 object-cover rounded-lg mb-3 border border-gray-700">
+        <h3 class="text-xl font-bold text-gray-100">Canon EOS R7</h3>
+        <p class="text-yellow-400 font-extrabold my-1">39.900.000 VNĐ</p>
+        <p class="text-sm text-gray-400 line-clamp-2 mb-3">
+            APS-C Mirrorless tốc độ cao, lý tưởng cho động vật hoang dã.
+        </p>
+        <button class="mt-auto w-full bg-blue-900 text-yellow-400 py-2 rounded-lg text-sm font-semibold hover:bg-blue-800 transition">
+            Thêm vào giỏ
+        </button>
+    </div>
+    
+    <!-- HÀNG 2 -->
+    <!-- Sản Phẩm 4: EOS 90D -->
+    <div class="bg-gray-900 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(252,211,77,0.5)] transition duration-300 overflow-hidden border border-gray-700 p-4 flex flex-col h-full">
+        <img src="90d.jpg" alt="Canon EOS 90D" class="w-full h-55 object-cover rounded-lg mb-3 border border-gray-700">
+        <h3 class="text-xl font-bold text-gray-100">Canon EOS 90D</h3>
+        <p class="text-yellow-400 font-extrabold my-1">29.000.000 VNĐ</p>
+        <p class="text-sm text-gray-400 line-clamp-2 mb-3">
+            DSLR 32.5MP, Lấy nét 45 điểm, Quay 4K.
+        </p>
+        <button class="mt-auto w-full bg-blue-900 text-yellow-400 py-2 rounded-lg text-sm font-semibold hover:bg-blue-800 transition">
+            Thêm vào giỏ
+        </button>
+    </div>
+
+    <!-- Sản Phẩm 5: EOS M50 Mark II -->
+    <div class="bg-gray-900 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(252,211,77,0.5)] transition duration-300 overflow-hidden border border-gray-700 p-4 flex flex-col h-full">
+        <img src="m50 mark ii.jpg" alt="Canon EOS M50 Mark II" class="w-full h-55 object-cover rounded-lg mb-3 border border-gray-700">
+        <h3 class="text-xl font-bold text-gray-100">Canon M50 Mark II</h3>
+        <p class="text-yellow-400 font-extrabold my-1">17.500.000 VNĐ</p>
+        <p class="text-sm text-gray-400 line-clamp-2 mb-3">
+            Máy ảnh Vlogger, Màn hình lật, Nhỏ gọn.
+        </p>
+        <button class="mt-auto w-full bg-blue-900 text-yellow-400 py-2 rounded-lg text-sm font-semibold hover:bg-blue-800 transition">
+            Thêm vào giỏ
+        </button>
+    </div>
+
+    <!-- Sản Phẩm 6: PowerShot G7 X Mark III -->
+    <div class="bg-gray-900 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(252,211,77,0.5)] transition duration-300 overflow-hidden border border-gray-700 p-4 flex flex-col h-full">
+        <img src="g7x.jpg" alt="Canon PowerShot G7 X Mark III" class="w-full h-55 object-cover rounded-lg mb-3 border border-gray-700">
+        <h3 class="text-xl font-bold text-gray-100">PowerShot G7 X III</h3>
+        <p class="text-yellow-400 font-extrabold my-1">14.000.000 VNĐ</p>
+        <p class="text-sm text-gray-400 line-clamp-2 mb-3">
+            Compact cao cấp, Livestream, Cảm biến 1.0 inch.
+        </p>
+        <button class="mt-auto w-full bg-blue-900 text-yellow-400 py-2 rounded-lg text-sm font-semibold hover:bg-blue-800 transition">
+            Thêm vào giỏ
+        </button>
+    </div>
+</div>
+
+ <!-- Section 3: Giới Thiệu  -->
+<section id="gioi-thieu" class="py-16 bg-gray-800 border-b border-gray-700">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="section-heading text-yellow-400">Về Canon Store Chính Hãng</h2>
+
+        <p class="text-lg text-gray-300 mb-8">
+            Chúng tôi là đại lý ủy quyền chính thức của Canon tại Việt Nam, cam kết mang đến những sản phẩm máy ảnh,
+            ống kính và phụ kiện chính hãng với chất lượng tốt nhất, bảo hành chính thức và dịch vụ hậu mãi chu đáo nhất.
+            Với đội ngũ kỹ thuật viên chuyên nghiệp, chúng tôi luôn sẵn sàng hỗ trợ bạn trên hành trình nhiếp ảnh.
+        </p>
+
+        <a href="#lien-he"
+           class="inline-block px-6 py-3 border border-yellow-400 text-yellow-400 font-semibold rounded-full
+           hover:bg-yellow-400 hover:text-black transition duration-300">
+            Tìm Hiểu Thêm
+        </a>
+    
+                  <h3 class="text-2xl font-semibold text-yellow-400 mt-8 mb-4">Video Giới Thiệu Công Nghệ</h3>
+
+                <!-- Nhúng Video YouTube (Responsive) -->
+                <div class="w-full h-[600px] rounded-xl overflow-hidden shadow-xl border border-gray-700">
+    <iframe 
+        class="w-full h-full" 
+        src="CANON.mp4" 
+        title="YouTube video player (Công nghệ Canon)"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+    </iframe>
+</div>
+
+</section>
+
+
+
+<!-- Section 4: Tin Tức Mới Nhất -->
+<section id="tin-tuc" class="py-16 bg-gray-800 border-b border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="section-heading text-yellow-400">Tin Tức & Đánh Giá</h2>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            
+            <!-- Bài viết 1 -->
+            <article class="bg-gray-900 p-5 rounded-xl shadow-lg border border-gray-700 product-card">
+                <h3 class="text-xl font-bold text-gray-100 mb-2 hover:text-yellow-400 transition duration-300 cursor-pointer">
+                    Đánh giá chi tiết Canon EOS R5 sau 1 năm sử dụng
+                </h3>
+                <p class="text-sm text-gray-500 mb-3">Ngày đăng: 15/11/2025</p>
+                <p class="text-gray-300 text-sm">
+                    EOS R5 vẫn là một "con quái vật" về hiệu suất. Bài viết này sẽ phân tích các ưu nhược điểm đã được chứng minh qua thời gian...
+                </p>
+            </article>
+
+            <!-- Bài viết 2 -->
+            <article class="bg-gray-900 p-5 rounded-xl shadow-lg border border-gray-700 product-card">
+                <h3 class="text-xl font-bold text-gray-100 mb-2 hover:text-yellow-400 transition duration-300 cursor-pointer">
+                    5 ống kính RF giá rẻ đáng mua nhất cho người mới
+                </h3>
+                <p class="text-sm text-gray-500 mb-3">Ngày đăng: 01/11/2025</p>
+                <p class="text-gray-300 text-sm">
+                    Không cần đầu tư quá nhiều, bạn vẫn có thể sở hữu những chiếc ống kính RF chất lượng cao với mức giá phải chăng...
+                </p>
+            </article>
+
+            <!-- Bài viết 3 -->
+            <article class="bg-gray-900 p-5 rounded-xl shadow-lg border border-gray-700 product-card">
+                <h3 class="text-xl font-bold text-gray-100 mb-2 hover:text-yellow-400 transition duration-300 cursor-pointer">
+                    Canon ra mắt firmware mới cải thiện AF cho dòng R
+                </h3>
+                <p class="text-sm text-gray-500 mb-3">Ngày đăng: 25/10/2025</p>
+                <p class="text-gray-300 text-sm">
+                    Phiên bản firmware mới nhất tập trung vào tối ưu hóa tốc độ và độ chính xác của hệ thống lấy nét tự động (AF)...
+                </p>
+            </article>
+
+        </div>
+    </div>
+
+        <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-10">
+                <!-- Danh Sách Tin Tức Mới -->
+                <div class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700">
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Các Bài Viết Nổi Bật</h3>
+                    <ul class="space-y-4 list-disc list-inside text-gray-300">
+                        <li>
+                            <a href="#" class="font-semibold hover:text-yellow-400 transition">Ra mắt ống kính RF 24-105mm F2.8 L IS USM Z - Đột phá mới!</a>
+                            <span class="text-sm text-gray-500 block ml-5">- Ngày 15/11/2025</span>
+                        </li>
+                        <li>
+                            <a href="#" class="font-semibold hover:text-yellow-400 transition">Mẹo Chụp Ảnh Chân Dung Mùa Thu với máy ảnh EOS R Series.</a>
+                            <span class="text-sm text-gray-500 block ml-5">- Ngày 10/11/2025</span>
+                        </li>
+                        <li>
+                            <a href="#" class="font-semibold hover:text-yellow-400 transition">Canon tổ chức Workshop "Kỹ thuật Quay Phim Điện Ảnh" tại TP.HCM.</a>
+                            <span class="text-sm text-gray-500 block ml-5">- Ngày 01/11/2025</span>
+                        </li>
+                        <li>
+                            <a href="#" class="font-semibold hover:text-yellow-400 transition">Bảng giá và Ưu đãi đặc biệt cho phụ kiện quay phim R-series.</a>
+                            <span class="text-sm text-gray-500 block ml-5">- Ngày 25/10/2025</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Bảng Thông Tin Hoạt Động -->
+                <div class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700">
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Lịch Hoạt Động Sắp Tới</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-gray-700 rounded-lg shadow-md">
+                            <thead class="bg-blue-900 text-yellow-400">
+                                <tr>
+                                    <th class="py-3 px-4 text-left font-semibold">Sự kiện</th>
+                                    <th class="py-3 px-4 text-left font-semibold">Thời gian</th>
+                                    <th class="py-3 px-4 text-left font-semibold">Địa điểm</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr class="border-b border-gray-800 hover:bg-gray-600 transition">
+                                    <td class="py-3 px-4">Triển lãm EOS R5 C</td>
+                                    <td class="py-3 px-4">25/11/2025</td>
+                                    <td class="py-3 px-4">Hà Nội</td>
+                                </tr>
+                                <tr class="border-b border-gray-800 hover:bg-gray-600 transition">
+                                    <td class="py-3 px-4">Workshop Chụp ảnh</td>
+                                    <td class="py-3 px-4">05/12/2025</td>
+                                    <td class="py-3 px-4">TP.HCM</td>
+                                </tr>
+                                <tr class="hover:bg-gray-600 transition">
+                                    <td class="py-3 px-4">Hội thảo ảnh đường phố</td>
+                                    <td class="py-3 px-4">15/12/2025</td>
+                                    <td class="py-3 px-4">Đà Nẵng</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. LIÊN HỆ / ĐĂNG KÝ (Section 5 - Form Bootstrap) -->
+    <section id="lien-he" class="full-page-section bg-gray-900 flex items-center justify-center">
+        <div class="max-w-2xl mx-auto p-8 bg-gray-800 rounded-2xl shadow-2xl w-full border border-gray-700">
+            <h2 class="section-heading !text-gray-100">Đăng Ký Nhận Tin & Liên Hệ</h2>
+            
+            <!-- FORM LIÊN HỆ (Mô phỏng Form Bootstrap - Đăng ký thành viên) -->
+            <form class="space-y-6">
+                <div>
+                    <label for="reg_name" class="block text-sm font-medium text-gray-300 mb-1">Họ và Tên (*)</label>
+                    <input type="text" id="reg_name" name="name" class="custom-form-control" placeholder="Nhập họ và tên của bạn" required>
+                </div>
+                <div>
+                    <label for="reg_email" class="block text-sm font-medium text-gray-300 mb-1">Email Đăng Ký (*)</label>
+                    <input type="email" id="reg_email" name="email" class="custom-form-control" placeholder="vidu@canon.com" required>
+                    <p class="mt-1 text-xs text-gray-500">Chúng tôi cam kết bảo mật thông tin của bạn.</p>
+                </div>
+                <div>
+                    <label for="reg_message" class="block text-sm font-medium text-gray-300 mb-1">Nội Dung Yêu Cầu Tư Vấn</label>
+                    <textarea id="reg_message" name="message" rows="4" class="custom-form-control" placeholder="Bạn quan tâm đến dòng máy nào hoặc cần hỗ trợ gì?"></textarea>
+                </div>
+                <!-- Checkbox -->
+                <div class="flex items-start">
+                    <input id="newsletter" type="checkbox" class="h-4 w-4 text-yellow-500 border-gray-600 rounded focus:ring-yellow-400 bg-gray-900">
+                    <label for="newsletter" class="ml-2 text-sm text-gray-300">
+                        Đồng ý nhận bản tin và ưu đãi từ Canon.
+                    </label>
+                </div>
+                
+                <button type="submit" class="w-full py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-bold text-gray-900 bg-yellow-500 hover:bg-yellow-400 focus:outline-none focus:ring-4 focus:ring-yellow-300 transition duration-300 transform hover:scale-[1.01]">
+                    Gửi Thông Tin & Đăng Ký
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER (Thông tin liên hệ chi tiết) -->
+    <footer class="bg-gray-900 text-gray-300 py-10 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Cột 1: Logo và Slogan -->
+            <div>
+                <h3 class="text-3xl font-extrabold text-yellow-400 mb-3">CANON STORE</h3>
+                <p class="text-sm text-gray-400">Nơi công nghệ và đam mê hội tụ.</p>
+                <p class="mt-4 text-xs text-gray-500">Giờ làm việc: T2 - T7 (8:00 - 18:00)</p>
+            </div>
+            
+            <!-- Cột 2: Thông tin Liên hệ -->
+            <div>
+                <h4 class="text-xl font-semibold mb-4 text-gray-100">Liên Hệ Chúng Tôi</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><strong class="text-yellow-400">Địa chỉ Trụ sở:</strong> 123 Phố Nhiếp Ảnh, Quận 1, TP.HCM</li>
+                    <li><strong class="text-yellow-400">Hotline Bán hàng:</strong> 1900 6789 (Miễn phí)</li>
+                    <li><strong class="text-yellow-400">Email Hỗ trợ:</strong> support@canonstore.vn</li>
+                    <li><strong class="text-yellow-400">Showroom HN:</strong> 456 Đường Kỹ Thuật Số, Q. Hoàn Kiếm, Hà Nội</li>
+                </ul>
+            </div>
+            
+            <!-- Cột 3: Chính sách -->
+            <div>
+                <h4 class="text-xl font-semibold mb-4 text-gray-100">Hỗ Trợ Khách Hàng</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-yellow-400">Chính sách bảo hành</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Chính sách đổi trả</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Hướng dẫn thanh toán</a></li>
+                    <li><a href="#" class="hover:text-yellow-400">Tuyển dụng</a></li>
+                </ul>
+            </div>
+
+            <!-- Cột 4: Đa phương tiện -->
+            <div>
+                 <h4 class="text-xl font-semibold mb-4 text-gray-100">Kết Nối Với Canon</h4>
+                 <div class="flex space-x-4">
+                     <!-- Facebook -->
+                     <a href="#" class="text-gray-400 hover:text-blue-500 transition duration-300"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 5.148 3.743 9.49 8.681 10.354v-7.388H7.423V12h3.258V9.387c0-3.235 1.956-4.99 4.867-4.99 1.404 0 2.327.104 2.651.15V7.49h-1.57c-1.558 0-1.859.74-1.859 1.822V12h3.29l-.53 3.348h-2.76V22.354C18.257 21.49 22 17.148 22 12 22 6.477 17.523 2 12 2z"/></svg></a>
+                     <!-- Instagram -->
+                     <a href="#" class="text-gray-400 hover:text-pink-500 transition duration-300"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.071 1.498.062 2.05.323 2.515.518a4.9 4.9 0 011.772 1.153c.636.635 1.153 1.137 1.772 1.153.195.465.456 1.017.518 2.515.06 1.266.071 1.646.071 4.85s-.011 3.584-.07 4.85c-.062 1.498-.323 2.05-.518 2.515a4.9 4.9 0 01-1.153 1.772c-.635.636-1.137 1.153-1.772 1.153-.465.195-1.017.456-2.515.518-1.266.06-1.646.071-4.85.071s-3.584-.011-4.85-.07c-1.498-.062-2.05-.323-2.515-.518a4.9 4.9 0 01-1.772-1.153c-.636-.635-1.153-1.137-1.772-1.153-.195-.465-.456-1.017-.518-2.515-.06-1.266-.071-1.646-.071-4.85s.011-3.584.07-4.85c.062-1.498.323-2.05.518-2.515a4.9 4.9 0 011.153-1.772c.635-.636 1.137-1.153 1.772-1.153.465-.195 1.017-.456 2.515-.518 1.266-.06 1.646-.071 4.85-.071zM12 5.92c3.344 0 6.08 2.736 6.08 6.08s-2.736 6.08-6.08 6.08-6.08-2.736-6.08-6.08 2.736-6.08 6.08-6.08zm0 2.163c-2.164 0-3.917 1.753-3.917 3.917s1.753 3.917 3.917 3.917 3.917-1.753 3.917-3.917-1.753-3.917-3.917-3.917zm6.302-3.834c-.828 0-1.5 0-1.5 0s0-1.42 0-1.42c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5-.672 1.5-1.5 1.5z"/></svg></a>
+                 </div>
+            </div>
+
+        </div>
+        <div class="mt-8 pt-4 border-t border-gray-700 text-center text-gray-500 text-sm">
+            &copy; 2025 Canon Store Vietnam. 
+        </div>
+    </footer>
+
+</body>
+</html>
